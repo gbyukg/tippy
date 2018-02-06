@@ -97,13 +97,12 @@ class Parser(object, metaclass=ABCMeta):
         cmd.command = command
         cmd.subcommand = subcommand
         cmd.params = cmd_params
-        print(id(cmd))
         return cmd
 
     def generate_cli_parser(self, subparser, subcommand='default', params={}):
         sub_parser = subparser.add_parser(subcommand)
         for key, val in params.items():
             sub_parser.add_argument(
-                '--' + key,
+                '-' + key,
                 default=val
             )

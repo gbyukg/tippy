@@ -42,7 +42,7 @@ class Zabbix(Plugin):
         # params = self.cmd.params
         host_graphs = self.zapi.graph.get(output='extend', expandName=True, filter={'host': self.cmd.params.graph_host})
         for graph in host_graphs:
-            if graph['name'] == self.cmd.params.graph_name:
+            if graph['name'] == self.cmd.params.graph:
                 graph['period'] = self.cmd.params.get('period', 3600)
                 graph['stime'] = time.time()-graph['period']
                 graph = graph
@@ -62,8 +62,8 @@ class Zabbix(Plugin):
             'method': 'files.upload',
             'options': {
                 'file': graphreq.content,
-                'filename': self.cmd.params.graph_name,
-                'title': '{:s} for {:s}'.format(self.cmd.params.graph_name, self.cmd.params.graph_host),
+                'filename': self.cmd.params.graph,
+                'title': '{:s} for {:s}'.format(self.cmd.params.graph, self.cmd.params.graph_host),
                 'channels': self.cmd.client.channel,
             }
         }
