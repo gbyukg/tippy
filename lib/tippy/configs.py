@@ -1,4 +1,4 @@
 from tippy.utils import *
 
-class TippyConfig(object, metaclass=MetaSingleton):
+class TippyConfigs(object, metaclass=MetaSingleton):
     pass

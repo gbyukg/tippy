@@ -1,5 +1,6 @@
-import logging
 import os
+import logging
+from argparse import ArgumentParser
 from tippy.utils import *
 from tippy.engin import *
 
@@ -16,5 +17,8 @@ def init():
 init()
 
 slack_token = os.environ.get('SLACK_TOKEN')
-print(slack_token)
+
 SlackEngin(slack_token=slack_token).start()
+
+def parse_args():
+    pass

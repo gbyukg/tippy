@@ -45,17 +45,17 @@ class Zabbix(Plugin):
             if graph['name'] == self.cmd.params.graph:
                 graph['period'] = self.cmd.params.get('period', 3600)
                 graph['stime'] = time.time()-graph['period']
-                graph = graph
+                current_graph = graph
                 break
 
-        if graph is None:
+        if current_graph is None:
             raise PluginError('no such zabbix graph')
 
         graph_url = ('{:s}/chart2.php?graphid={g[graphid]}' 
                     '&period={g[period]}'
                     '&width={g[width]}'
                     '&height={g[height]}'
-                    '&stime={g[stime]}'.format(self.cmd.property.server, g=graph))
+                    '&stime={g[stime]}'.format(self.cmd.property.server, g=current_graph))
         graphreq = self.session.get(graph_url,verify=False)
 
         return {
