@@ -32,22 +32,15 @@ class SlackEngin(object):
         while True:
             try:
                 datas = self.sc.rtm_read()
-            except Exception as e:
-                print(e)
+            except ConnectionResetError as e:
                 LOGGER.exception(e)
-                self.sc.rtm_connect()
-                #self.sc.rtm_connect()
-                #datas = self.sc.rtm_read()
-                # 有问题
-                # self.start()
-                #self.sc = SlackClient(self.slack_token)
-                #datas = self.sc.rtm_read()
-            for data in datas:
-                # only the text begin with '!' will be considered as a command 
-                if data.get('type') == 'message' and data.get('text','').startswith('!'):
-                    single_cmd = threading.Thread(target=self.execute, args=(data,))
-                    single_cmd.start()
-                    # self.execute(data)
+                self.sc.rtm_connect(reconnect=True)
+            else:
+                for data in datas:
+                    # only the text begin with '!' will be considered as a command 
+                    if data.get('type') == 'message' and data.get('text','').startswith('!'):
+                        single_cmd = threading.Thread(target=self.execute, args=(data,))
+                        single_cmd.start()
 
     def execute(self, data):
         '''
