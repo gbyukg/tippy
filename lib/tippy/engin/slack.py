@@ -32,7 +32,7 @@ class SlackEngin(object):
         while True:
             try:
                 datas = self.sc.rtm_read()
-            except ConnectionResetError as e:
+            except Exception as e:
                 LOGGER.exception(e)
                 self.sc.rtm_connect(reconnect=True)
             else:
