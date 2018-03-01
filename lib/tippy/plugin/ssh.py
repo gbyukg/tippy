@@ -12,6 +12,7 @@ class Ssh(Plugin):
     @botcmd
     def ssh_cmd(self):
         executor = self.cmd.client.executor
+        ssh_server = self.cmd.params.ssh_server + self.cmd.property.ssh_server_suffix
 
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -21,13 +22,11 @@ class Ssh(Plugin):
         private_key_stream.close()
 
         client.connect(
-            hostname=self.cmd.params.ssh_server,
+            hostname=ssh_server,
             username=self.cmd.params.ssh_user,
             port=self.cmd.params.ssh_port,
             pkey=private_key)
         stdin, stdout, stderr = client.exec_command(self.cmd.property.ssh_command)
-        
-        client.close()
         
         stdout_output = ''
         for line in stdout:
@@ -36,6 +35,8 @@ class Ssh(Plugin):
         stderr_str = ''
         for err in stderr:
             stderr_str += err.strip('\n')
+        
+        client.close()
         
         if stderr_str:
             raise Exception("Run SSH command failed: [{:s}]".format(stderr_str))
@@ -48,7 +49,7 @@ class Ssh(Plugin):
                         "color": '#36a64f',
                         "title": "Run the command `{:s}` at [{:s}] as user [{:}]".format(
                             self.cmd.property.ssh_command,
-                            self.cmd.params.ssh_server,
+                            ssh_server,
                             self.cmd.params.ssh_user
                             ),
                         "text": stdout_output,
