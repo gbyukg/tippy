@@ -50,8 +50,8 @@ class Command(object):
         channel = self.cmd.client.channel
         if allow_channels and channel not in allow_channels:
             cmd = '{:s} {:s}'.format(
-                self.cmd_struct['current_command'],
-                self.cmd_struct['subcommand']
+                self.cmd.current_command,
+                self.cmd.subcommand
             )
             self._permission_error = 'the command can not be run in this channel'
             logger.warning(('the command [{:s}] can only be run in channels: [{:s}], '
